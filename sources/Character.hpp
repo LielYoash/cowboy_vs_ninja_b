@@ -17,7 +17,8 @@ class Character
 private:
     string name;
     Point location;
-    int HP;
+    int HP =50;
+    string identifier = "Spactator";
 
 public:
     Character(string name, Point location);
@@ -26,15 +27,31 @@ public:
     void hit(int damage);
     string getName();
     Point getLocation();
+    string getIdentifier();
     int getHP();
     void setHP(int newHP);
     virtual string print();
+};
+
+class Cowboy : public Character
+{
+private:
+    int numOfBullets = 6;
+    string identifier = "C";
+
+public:
+    Cowboy(string name, Point location);
+    void reload();
+    void shoot(Character *other);
+    string print();
+    bool hasboolets();
 };
 
 class Ninja : public Character
 {
 private:
     int speed;
+    string identifier = "N";
 
 public:
     Ninja(string name, Point location);
@@ -43,19 +60,6 @@ public:
     int getSpeed();
     string print();
     void setSpeed(int newSpeed);
-};
-
-class Cowboy : public Character
-{
-private:
-    int numOfBullets = 6;
-
-public:
-    Cowboy(string name, Point location);
-    void reload();
-    void shoot(Character *other);
-    string print();
-    bool hasboolets();
 };
 
 class OldNinja : public Ninja

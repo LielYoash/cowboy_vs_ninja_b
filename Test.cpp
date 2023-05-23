@@ -25,6 +25,67 @@ TEST_CASE("Point")
     CHECK(e.getY() == 5);
 }
 
+TEST_CASE("generic character")
+{
+    Point a(32.3, 44);
+    Character *tom = new Character("Tom", a);
+    CHECK(tom->getName() == "Tom");
+    CHECK(tom->getLocation().getX() == 32.3);
+    CHECK(tom->getLocation().getY() == 44);
+    CHECK(tom->getHP() == 50);
+    CHECK(tom->isAlive() == true);
+    tom->hit(10);
+    CHECK(tom->getHP() == 40);
+    CHECK(tom->isAlive() == true);
+    tom->hit(100);
+    CHECK(tom->getHP() == 0);
+    CHECK(tom->isAlive() == false);
+    tom->setHP(100);
+    CHECK(tom->getHP() == 100);
+    CHECK(tom->isAlive() == true);
+    string s = tom->print();
+    cout << s << endl;
+    tom->setHP(-100);
+    CHECK(tom->getHP() == 0);
+    CHECK(tom->isAlive() == false);
+    s = tom->print();
+    cout << s << endl;
+}
+
+TEST_CASE("Cowboy")
+{
+    Point a(32.3, 44);
+    Cowboy *tom = new Cowboy("Tom", a);
+    Cowboy *jim = new Cowboy("Jim", a);
+    CHECK(tom->getName() == "Tom");
+    CHECK(tom->getLocation().getX() == 32.3);
+    CHECK(tom->getLocation().getY() == 44);
+    CHECK(tom->getHP() == 110);
+    CHECK(tom->isAlive() == true);
+    CHECK(tom->hasboolets() == true);
+    tom->hit(10);
+    CHECK(tom->getHP() == 100);
+    CHECK(tom->isAlive() == true);
+    tom->hit(100);
+    CHECK(tom->getHP() == 0);
+    CHECK(tom->isAlive() == false);
+    tom->setHP(100);
+    CHECK(tom->getHP() == 100);
+    CHECK(tom->isAlive() == true);
+    // string s = tom->print();
+    // cout << s << endl;
+    tom->shoot(jim);    
+    CHECK(tom->hasboolets() == true);
+    tom->shoot(jim);
+    tom->shoot(jim);
+    tom->shoot(jim);
+    tom->shoot(jim);
+    CHECK(tom->hasboolets() == true);
+    tom->reload();
+    CHECK(tom->hasboolets() == true);
+}
+
+
 // TEST_CASE("Character")
 // {
 //     Point a(32.3, 44), b(1.3, 3.5);
