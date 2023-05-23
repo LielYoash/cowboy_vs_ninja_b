@@ -29,6 +29,9 @@ Point Point::move_towards(Point origin, double distance, Point destination) {
     if (distance == origin.distance(destination)) {
         return destination;
     }
+    if (distance > origin.distance(destination)) {
+        return destination;
+    }
     double x = origin.x + (distance * ((destination.x - origin.x) / origin.distance(destination)));
     double y = origin.y + (distance * ((destination.y - origin.y) / origin.distance(destination)));
     return Point(x, y);

@@ -17,7 +17,7 @@ class Character
 private:
     string name;
     Point location;
-    int HP =50;
+    int HP =0;
     string identifier = "Spactator";
 
 public:
@@ -27,6 +27,7 @@ public:
     void hit(int damage);
     string getName();
     Point getLocation();
+    void setLocation(Point newLocation);
     string getIdentifier();
     int getHP();
     void setHP(int newHP);

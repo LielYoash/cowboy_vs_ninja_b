@@ -3,7 +3,10 @@
 using namespace std;
 using namespace ariel;
 
-// General Character functions
+//--------------------------------------------------------------------------------//
+//---------------------------General Character functions--------------------------//
+//--------------------------------------------------------------------------------//
+
 Character::Character(string name, Point location)
 {
     this->name = name;
@@ -14,6 +17,7 @@ double Character::distance(Character *other)
 {
     return this->location.distance(other->location);
 }
+
 bool Character::isAlive()
 {
     if (this->getHP() > 0)
@@ -28,12 +32,24 @@ bool Character::isAlive()
 
 void Character::hit(int damage)
 {
-    this->setHP(this->getHP() - damage);
+    if (damage > 0 && this->isAlive())
+    {
+        this->setHP(this->getHP() - damage);
+    }
+    else
+    {
+        throw invalid_argument("Damage must be positive");
+    }
 }
 
 Point Character::getLocation()
 {
     return this->location;
+}
+
+void Character::setLocation(Point newLocation)
+{
+    this->location = newLocation;
 }
 
 string Character::getName()
@@ -52,7 +68,7 @@ void Character::setHP(int updated)
     {
         updated = 0;
     }
-    
+
     this->HP = updated;
 }
 
@@ -63,16 +79,13 @@ string Character::getIdentifier()
 
 string Character::print()
 {
-    if(this->isAlive()){
-        return this->getName() + " " + to_string(this->getHP()) + " ("+ to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")";
-    }
-    else{
-        return "("+this->getIdentifier()+") " "("+ this->getName() + ") " + to_string(this->getHP()) + " ("+ to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")" ;
-    }
+    return getIdentifier();
 }
 
-// Cowboy functions
-Cowboy::Cowboy(string name, Point location) : Character(name, location) {this->setHP(110);}
+//--------------------------------------------------------------------------------//
+//--------------------------------Cowboy functions--------------------------------//
+//--------------------------------------------------------------------------------//
+Cowboy::Cowboy(string name, Point location) : Character(name, location) { this->setHP(110); }
 
 bool Cowboy::hasboolets()
 {
@@ -81,7 +94,7 @@ bool Cowboy::hasboolets()
 
 void Cowboy::reload()
 {
-    if (this->numOfBullets)
+    if (this->numOfBullets < 6)
     {
         this->numOfBullets = 6;
     }
@@ -89,56 +102,101 @@ void Cowboy::reload()
 
 void Cowboy::shoot(Character *enemy)
 {
+    if (numOfBullets == 0)
+    {
+        throw invalid_argument("No Bullets");
+    }
     if (this->isAlive() && this->hasboolets())
     {
         enemy->hit(10);
         this->numOfBullets--;
-    }
-    if (numOfBullets == 0)
-    {
-        throw invalid_argument("No Bullets");
     }
     if (this->isAlive() == false)
     {
         throw invalid_argument("Your Cowboy is Dead");
     }
 }
+
 string Cowboy::print()
 {
-    return this->print();
+    if (this->isAlive())
+    {
+        return this->getName() + " " + to_string(this->getHP()) + " (" + to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")";
+    }
+    else
+    {
+        return "(" + this->getIdentifier() + ") "
+                                             "(" +
+               this->getName() + ") " + to_string(this->getHP()) + " (" + to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")";
+    };
 }
 
-// General ninja functions
-Ninja::Ninja(string name, Point location) : Character(name, location)
+//--------------------------------------------------------------------------------//
+//----------------------------General Ninja functions-----------------------------//
+//--------------------------------------------------------------------------------//
+Ninja::Ninja(string name, Point location) : Character(name, location) {}
+
+void Ninja::move(Character *enemy)
 {
+    this->setLocation(this->getLocation().move_towards(getLocation(), this->getSpeed(), enemy->getLocation()));
 }
-void Ninja::move(Character *)
+
+void Ninja::slash(Character *enemy)
 {
+    if (enemy->isAlive() == false)
+    {
+        throw invalid_argument("Enemy is Dead");
+    }
+    
+    if (this->isAlive() && this->getLocation().distance(enemy->getLocation()) <= 1)
+    {
+        enemy->hit(40);
+    }
+    else
+    {
+        throw invalid_argument("Enemy is too far");
+    }
 }
-void Ninja::slash(Character *other)
+
+void Ninja::setSpeed(int newSpeed)
 {
+    this->speed = newSpeed;
 }
-void Ninja::setSpeed(int)
-{
-}
+
 int Ninja::getSpeed()
 {
-    return 1;
+    return this->speed;
 }
+
 string Ninja::print()
 {
-    return "";
+    if (this->isAlive())
+    {
+        return this->getName() + " " + to_string(this->getHP()) + " (" + to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")";
+    }
+    else
+    {
+        return "(" + this->getIdentifier() + ") "
+                                             "(" +
+               this->getName() + ") " + to_string(this->getHP()) + " (" + to_string(this->getLocation().getX()) + "," + to_string(this->getLocation().getY()) + ")";
+    };
 }
 
 // The kinds of the ninja
 OldNinja::OldNinja(string name, Point location) : Ninja(name, location)
 {
+    this->setHP(150);
+    this->setSpeed(8);
 }
 
 TrainedNinja::TrainedNinja(string name, Point location) : Ninja(name, location)
 {
+    this->setHP(120);
+    this->setSpeed(12);
 }
 
 YoungNinja::YoungNinja(string name, Point location) : Ninja(name, location)
 {
+    this->setHP(100);
+    this->setSpeed(14);
 }
