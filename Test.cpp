@@ -189,6 +189,58 @@ TEST_CASE("simple team"){
     team_B.print();
 }
 
+TEST_CASE("simple team2"){
+    Point a(32.3, 44), b(1.3, 3.5);
+    Cowboy *tom = new Cowboy("Tom", a);
+    YoungNinja *sushi = new YoungNinja("sushi", b);
+    Team2 team_A(tom);
+    Team2 team_B(sushi);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 1);
+    CHECK(team_B.stillAlive() == 1);
+    team_A.attack(&team_B);
+    team_B.attack(&team_A);
+    CHECK(team_A.stillAlive() == 0);
+    CHECK(team_B.stillAlive() == 1);
+    CHECK_THROWS_AS(team_A.attack(&team_B), std::invalid_argument);
+    CHECK_THROWS_AS(team_B.attack(&team_A), std::invalid_argument);
+    sushi->setHP(0);
+    team_A.print();
+    team_B.print();
+    OldNinja *kenshi = new OldNinja("Kenshi", Point(35, 37.5));
+    team_A.add(kenshi);
+    team_A.print();
+    TrainedNinja *hikari = new TrainedNinja("Hikari", Point(12, 81));
+    team_A.add(hikari);
+    team_A.print();
+    Cowboy *jerry = new Cowboy("Jerry", Point(12, 81));
+    team_B.add(jerry);
+    team_B.print();
+}
+
 // TEST_CASE("Teams")
 // {
 //     Point a(32.3, 44), b(1.3, 3.5);
