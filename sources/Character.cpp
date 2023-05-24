@@ -77,15 +77,52 @@ string Character::getIdentifier()
     return this->identifier;
 }
 
+void Character::setIdentifier(Character *other)
+{
+    if (dynamic_cast<Cowboy *>(other) != nullptr)
+    {
+        this->identifier = "C";
+    }
+    else if (dynamic_cast<Ninja *>(other) != nullptr)
+    {
+        this->identifier = "N";
+    }
+    else
+    {
+        throw invalid_argument("Character is not a Cowboy or a Ninja");
+    }
+}
+
 string Character::print()
 {
     return getIdentifier();
 }
 
+void Character::recruit()
+{
+    if (isAlive() == false)
+    {
+        throw invalid_argument("Character is dead");
+    }
+    else
+    {
+        this->inTeam = true;
+    }
+}
+
+bool Character::recruited()
+{
+    return this->inTeam;
+}
+
 //--------------------------------------------------------------------------------//
 //--------------------------------Cowboy functions--------------------------------//
 //--------------------------------------------------------------------------------//
-Cowboy::Cowboy(string name, Point location) : Character(name, location) { this->setHP(110); }
+Cowboy::Cowboy(string name, Point location) : Character(name, location)
+{
+    this->setHP(110);
+    setIdentifier(this);
+}
 
 bool Cowboy::hasboolets()
 {
@@ -134,7 +171,7 @@ string Cowboy::print()
 //--------------------------------------------------------------------------------//
 //----------------------------General Ninja functions-----------------------------//
 //--------------------------------------------------------------------------------//
-Ninja::Ninja(string name, Point location) : Character(name, location) {}
+Ninja::Ninja(string name, Point location) : Character(name, location) { setIdentifier(this); }
 
 void Ninja::move(Character *enemy)
 {
@@ -147,7 +184,7 @@ void Ninja::slash(Character *enemy)
     {
         throw invalid_argument("Enemy is Dead");
     }
-    
+
     if (this->isAlive() && this->getLocation().distance(enemy->getLocation()) <= 1)
     {
         enemy->hit(40);

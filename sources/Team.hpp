@@ -15,15 +15,19 @@ using namespace std;
 using namespace ariel;
 
 class Team{
-    private:
-    vector <Character*> team;
-    const int maxTeamSize = 10;
+    protected:
+    vector <Character*> team{10};
     Character *leader;
     public:
     Team(Character *leader);
+    ~Team();
+    bool inGame(Character *member);
     void add(Character *newMember);
     virtual void print();
     int stillAlive();
-    void attack(Team *other);
+    virtual void attack(Team *other);
+    Character* potencialVictim(Team *Team, Character *leader);
+    Character *getLeader();
+    void setLeader(Character *newLeader);
 };
 #endif // TEAM_HPP

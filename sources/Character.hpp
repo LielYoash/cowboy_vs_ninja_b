@@ -14,11 +14,12 @@ using namespace ariel;
 
 class Character
 {
-private:
+protected:
     string name;
     Point location;
     int HP =0;
-    string identifier = "Spactator";
+    string identifier;
+    bool inTeam = false;
 
 public:
     Character(string name, Point location);
@@ -29,16 +30,18 @@ public:
     Point getLocation();
     void setLocation(Point newLocation);
     string getIdentifier();
+    void setIdentifier(Character *other);
     int getHP();
     void setHP(int newHP);
     virtual string print();
+    virtual void recruit();
+    virtual bool recruited();
 };
 
 class Cowboy : public Character
 {
 private:
     int numOfBullets = 6;
-    string identifier = "C";
 
 public:
     Cowboy(string name, Point location);
@@ -52,7 +55,6 @@ class Ninja : public Character
 {
 private:
     int speed;
-    string identifier = "N";
 
 public:
     Ninja(string name, Point location);
