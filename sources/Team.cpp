@@ -2,7 +2,7 @@
 using namespace std;
 using namespace ariel;
 
-Team::Team(Character *leader)
+Team::Team(Character *leader) : leader(leader)
 {
     this->team.clear();
     if (leader == nullptr)
@@ -15,15 +15,15 @@ Team::Team(Character *leader)
     }
     if (leader->recruited() == true)
     {
-        throw invalid_argument("Character is already recruited");
+        throw std::runtime_error("Character is in a team");
     }
-    this->leader = leader;
     this->team.push_back(leader);
+    leader->recruit(true);
 }
 
 Team::~Team()
 {
-    for (std::vector<Character*>::size_type i =0; i < team.size(); i++)
+    for (std::vector<Character *>::size_type i = 0; i < team.size(); i++)
     {
         delete team.at(i);
     }
@@ -47,30 +47,40 @@ void Team::add(Character *newMember)
     {
         throw invalid_argument("Character is null");
     }
-    if (team.size() < 10)
+    if (newMember->recruited() == true)
     {
-        newMember->recruit();
-        team.push_back(newMember);
+        throw std::runtime_error("Character is in a team");
     }
-    else
+    if (newMember->isAlive() == false)
     {
-        throw invalid_argument("Team is full");
+        throw std::runtime_error("Character is dead");
     }
+    if (this->team.size() == 10)
+    {
+        throw std::runtime_error("Team is full");
+    }
+    this->team.push_back(newMember);
+    newMember->recruit(true);
 }
 
 void Team::print()
 {
-    for (int i =0; i < 2; i++)
+    for (int i = 0; i < 2; i++)
     {
-        for(std::vector<Character*>::size_type j=0; j < team.size(); j++){
-            if(i==0){
-                if(dynamic_cast<Cowboy*>(team.at(j)) != nullptr){
-                    cout << dynamic_cast<Cowboy*>(team.at(j))->print()<< endl;
+        for (std::vector<Character *>::size_type j = 0; j < team.size(); j++)
+        {
+            if (i == 0)
+            {
+                if (dynamic_cast<Cowboy *>(team.at(j)) != nullptr)
+                {
+                    cout << dynamic_cast<Cowboy *>(team.at(j))->print() << endl;
                 }
             }
-            else{
-                if(dynamic_cast<Ninja*>(team.at(j)) != nullptr){
-                    cout << dynamic_cast<Ninja*>(team.at(j))->print()<< endl;
+            else
+            {
+                if (dynamic_cast<Ninja *>(team.at(j)) != nullptr)
+                {
+                    cout << dynamic_cast<Ninja *>(team.at(j))->print() << endl;
                 }
             }
         }
@@ -80,7 +90,7 @@ void Team::print()
 int Team::stillAlive()
 {
     int alive = 0;
-    for (std::vector<Character*>::size_type i =0; i < team.size(); i++)
+    for (std::vector<Character *>::size_type i = 0; i < team.size(); i++)
     {
         if (team.at(i)->isAlive())
         {
@@ -92,13 +102,14 @@ int Team::stillAlive()
 
 void Team::attack(Team *enemyTeam)
 {
+
     if (enemyTeam == nullptr)
     {
         throw invalid_argument("Team is null");
     }
     if (enemyTeam->stillAlive() == 0)
     {
-        throw invalid_argument("Team is dead");
+        throw runtime_error("Team is dead");
     }
     if (enemyTeam->getLeader()->isAlive() == false)
     {
@@ -108,7 +119,7 @@ void Team::attack(Team *enemyTeam)
     {
         throw invalid_argument("Team is attacking itself");
     }
-    if(this->stillAlive() == 0)
+    if (this->stillAlive() == 0)
     {
         throw invalid_argument("Team is dead");
     }
@@ -151,11 +162,13 @@ void Team::attack(Team *enemyTeam)
         {
             victim = potencialVictim(enemyTeam, this->leader);
         }
-        if(dynamic_cast<Ninja*>(teamate) != nullptr && teamate->distance(victim)<=1){
-            dynamic_cast<Ninja*>(teamate)->slash(victim);
+        if (dynamic_cast<Ninja *>(teamate) != nullptr && teamate->distance(victim) <= 1)
+        {
+            dynamic_cast<Ninja *>(teamate)->slash(victim);
         }
-        else if (dynamic_cast<Ninja*>(teamate) != nullptr && teamate->distance(victim)>1){
-            dynamic_cast<Ninja*>(teamate)->move(victim);
+        else if (dynamic_cast<Ninja *>(teamate) != nullptr && teamate->distance(victim) > 1)
+        {
+            dynamic_cast<Ninja *>(teamate)->move(victim);
         }
     }
 }
@@ -163,8 +176,8 @@ void Team::attack(Team *enemyTeam)
 Character *Team::potencialVictim(Team *Team, Character *leader)
 {
     double minDistance = 1000000;
-    std::vector<Character*>::size_type index = 0;
-    for (std::vector<Character*>::size_type i =0; i < Team->team.size(); i++)
+    std::vector<Character *>::size_type index = 0;
+    for (std::vector<Character *>::size_type i = 0; i < Team->team.size(); i++)
     {
         if (Team->team.at(i)->isAlive())
         {

@@ -241,31 +241,4 @@ TEST_CASE("simple team2"){
     team_B.print();
 }
 
-// TEST_CASE("Teams")
-// {
-//     Point a(32.3, 44), b(1.3, 3.5);
-//     Cowboy *tom = new Cowboy("Tom", a);
-//     OldNinja *sushi = new OldNinja("sushi", b);
-//     YoungNinja *yogi = new YoungNinja("Yogi", Point(64, 57));
-//     TrainedNinja *hikari = new TrainedNinja("Hikari", Point(12, 81));
-//     Team team_A(tom);
-//     Team team_B(sushi);
-//     team_A.add(yogi);
-//     team_B.add(hikari);
-//     CHECK(team_A.stillAlive() == 2);
-//     CHECK(team_B.stillAlive() == 2);
-//     team_A.attack(&team_B);
-//     CHECK(team_B.stillAlive() == 1);
-//     team_B.attack(&team_A);
-//     CHECK(team_A.stillAlive() == 1);
-//     team_A.print();
-//     team_B.print();
-//     team_A.attack(&team_B);
-//     CHECK(team_B.stillAlive() == 0);
-//     team_B.attack(&team_A);
-//     CHECK(team_A.stillAlive() == 0);
-//     team_A.print();
-//     team_B.print();
-//     CHECK(team_A.stillAlive() == 0);
-//     CHECK(team_B.stillAlive() == 0);
-// }
+

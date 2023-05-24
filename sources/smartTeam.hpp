@@ -11,7 +11,7 @@
 using namespace std;
 using namespace ariel;
 
-class smartTeam{
+class smartTeam : public Team{
     public:
     smartTeam(Character *leader);
     void attack(Team *other);

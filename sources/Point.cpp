@@ -19,7 +19,7 @@ void Point::print(){
     cout << "(" << this->x << "," << this->y << ")" << endl;
 }
 
-Point Point::move_towards(Point origin, double distance, Point destination) {
+Point Point::moveTowards(Point origin, Point destination,  double distance) {
     if (distance < 0) {
         throw invalid_argument("distance cannot be negative");
     }

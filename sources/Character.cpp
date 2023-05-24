@@ -11,6 +11,7 @@ Character::Character(string name, Point location)
 {
     this->name = name;
     this->location = location;
+    this->inTeam = false;
 }
 
 double Character::distance(Character *other)
@@ -98,7 +99,7 @@ string Character::print()
     return getIdentifier();
 }
 
-void Character::recruit()
+void Character::recruit(bool)
 {
     if (isAlive() == false)
     {
@@ -131,6 +132,10 @@ bool Cowboy::hasboolets()
 
 void Cowboy::reload()
 {
+    if(this->isAlive() == false)
+    {
+        throw runtime_error("Cowboy is dead");
+    }
     if (this->numOfBullets < 6)
     {
         this->numOfBullets = 6;
@@ -139,19 +144,23 @@ void Cowboy::reload()
 
 void Cowboy::shoot(Character *enemy)
 {
-    if (numOfBullets == 0)
+    if (this->isAlive() == false)
     {
-        throw invalid_argument("No Bullets");
+        throw runtime_error("Cowboy is dead");
     }
-    if (this->isAlive() && this->hasboolets())
+    if(enemy->isAlive() == false)
+    {
+        throw runtime_error("Enemy is dead");
+    }
+    if(enemy == this){
+        throw runtime_error("Cowboy can't shoot himself");
+    }
+    if (this->isAlive() && this->hasboolets()&& enemy->isAlive())
     {
         enemy->hit(10);
         this->numOfBullets--;
     }
-    if (this->isAlive() == false)
-    {
-        throw invalid_argument("Your Cowboy is Dead");
-    }
+
 }
 
 string Cowboy::print()
@@ -175,24 +184,28 @@ Ninja::Ninja(string name, Point location) : Character(name, location) { setIdent
 
 void Ninja::move(Character *enemy)
 {
-    this->setLocation(this->getLocation().move_towards(getLocation(), this->getSpeed(), enemy->getLocation()));
+    this->setLocation(this->getLocation().moveTowards(getLocation(), enemy->getLocation(), this->getSpeed()));
 }
 
 void Ninja::slash(Character *enemy)
 {
     if (enemy->isAlive() == false)
     {
-        throw invalid_argument("Enemy is Dead");
+        throw runtime_error("Enemy is dead");
+    }
+    if(this->isAlive() == false)
+    {
+        throw runtime_error("Ninja is dead");
+    }
+    if(enemy == this){
+        throw runtime_error("Ninja can't slash himself");
     }
 
     if (this->isAlive() && this->getLocation().distance(enemy->getLocation()) <= 1)
     {
         enemy->hit(40);
     }
-    else
-    {
-        throw invalid_argument("Enemy is too far");
-    }
+
 }
 
 void Ninja::setSpeed(int newSpeed)

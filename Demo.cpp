@@ -26,7 +26,9 @@ int main() {
     cout << tom->print() <<endl;
 
     sushi->move(tom);
+      cout << "1" <<endl;
     sushi->slash(tom);
+      cout << "2" <<endl;
 
     Team team_A(tom); 
     team_A.add(new YoungNinja("Yogi", Point(64,57)));

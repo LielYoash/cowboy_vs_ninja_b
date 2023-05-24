@@ -19,7 +19,7 @@ protected:
     Point location;
     int HP =0;
     string identifier;
-    bool inTeam = false;
+    bool inTeam;
 
 public:
     Character(string name, Point location);
@@ -34,7 +34,7 @@ public:
     int getHP();
     void setHP(int newHP);
     virtual string print();
-    virtual void recruit();
+    virtual void recruit(bool);
     virtual bool recruited();
 };
 
